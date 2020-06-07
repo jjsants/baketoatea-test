@@ -87,7 +87,9 @@ new fullpage('#fullpage', {
   }
 });
 
-//collection fullPage
+
+//collection Page
+
 //function used to create the first carousel
 function changeSlide(direction) {
   var currentImg = $(".active");
@@ -111,7 +113,7 @@ function changeSlide(direction) {
   currentImg.removeClass("active");
 }
 
-//collection fullPage
+//collection Page
 //function used to create the second carousel
 function changeSlide2(direction) {
   var currentImg = $(".active2");
@@ -136,70 +138,89 @@ function changeSlide2(direction) {
 }
 
 
-// newsletter page
+// ------------------------------------------------------
+// map api
 
-const express = require("express");
-const bodyParser = require("body-parser");
-const request = require("request");
-const https = require("https");
+function initMap() {
+  var dublin = {
+    lat: 53.395455999999996,
+    lng: -6.127616
 
-const app = express();
-
-app.use(express.static("public"));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-app.get("/", function(req, res) {
-  res.sendFile(__dirname + "/index.html")
-});
-
-app.post("/", function(req, res) {
-  const firstName = req.body.fName;
-  const lastName = req.body.lName;
-  const email = req.body.email;
-
-  const data = {
-    members: [{
-      email_address: email,
-      status: "subscribed",
-      merge_fields: {
-        FNAME: firstName,
-        LNAME: lastName
-      }
-    }]
   };
-  const jsonData = JSON.stringify(data);
-  const url = "https://us18.api.mailchimp.com/3.0/lists/325563e72a";
 
-  const options = {
-    method: "POST",
-    auth: "junior:3c34340d3edade3fcd23d235e614f1ae-us18"
-  }
-
-  const request = https.request(url, options, function(response) {
-
-    if (response.statusCode === 200){
-      res.sendFile(__dirname + "/success.html");
-    }else{
-      res.sendFile(__dirname + "/failure.html");
-    }
-
-    response.on("data", function(data) {
-      console.log(JSON.parse(data));
-    });
+  var map = new google.maps.Map(document.getElementById('map'), {
+    scaleControl: true,
+    center: dublin,
+    zoom: 14
   });
-  request.write(jsonData);
-  request.end();
-});
 
-app.post("/failure", function(req, res){
-  res.redirect("/");
+  var infowindow = new google.maps.InfoWindow;
+  infowindow.setContent('<b>BakedToATea</b>');
+
+  var marker = new google.maps.Marker({
+    map: map,
+    position: dublin
+  });
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+
+  });
+}
+// -----------------------------------------------------------
+
+
+// -----------------------------------------------------------
+//recipe API
+
+//add an event listener to the button that runs the function sendApiRequest when it is clicked.
+let searchInput = document.querySelector(".searchImput")
+let searchButton = document.querySelector("#search")
+searchButton.addEventListener("click", () => {
+  console.log("button pressed")
+  sendApiRequest(searchInput.value)
 })
 
-app.listen(process.env.PORT || 3000, function() {
-  console.log("Server is running locally on port 3000");
-});
+//an asysncrhonous function to fetch data from the API.
+async function sendApiRequest(text) {
+  let search = text;
+  let APP_ID = "8890b18e"
+  let API_KEY = "83f29000c0d94a9e37e048533135f2c4"
+  let response = await fetch(`https://api.edamam.com/search?app_id=${APP_ID}&app_key=${API_KEY}&q=${search}`);
+  console.log(response)
+  let data = await response.json()
+  console.log(data)
+  useApiData(data)
+}
 
-//api key:  3c34340d3edade3fcd23d235e614f1ae-us18
-//unique id:  325563e72a
+//function that does something with the data received from the API. The name of the function should be customized to whatever you are doing with
+// function useApiData(data) {
+//     document.querySelector("#content").innerHTML = `
+// <div class="card" style="width: 18rem;">
+//   <img src="${data.hits[0].recipe.image}" class="card-img-top" alt="...">
+//   <div class="card-body">
+//     <h5 class="card-title">${data.hits[0].recipe.label}</h5>
+//     <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+//     <a href="${data.hits[0].recipe.url}" class="btn btn-primary " target="_blank">Take me to the Full Recipe</a>
+//   </div>
+// </div>
+// `
+// }
+
+function useApiData(data){
+  
+  for (let i = 0 ;i < document.querySelectorAll("#content").length; i++) {
+
+  document.querySelector("#content").innerHTML = `
+<div id="wrapper">
+<div class="card" style="width: 18rem;">
+  <img src="${data.hits[i].recipe.image}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">${data.hits[i].recipe.label}</h5>
+    <p class="card-text">Ingredients: ${data.hits[i].recipe.ingredientLines}</p>
+    <p class="card-text">Prep Time: ${data.hits[i].recipe.totalTime} min</p>
+    <a href="${data.hits[i].recipe.url}" class="btn btn-primary">Full Recipe</a>
+  </div>
+</div>
+`
+}
+}
