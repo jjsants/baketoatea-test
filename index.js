@@ -207,8 +207,31 @@ async function sendApiRequest(text) {
 // }
 
 function useApiData(data){
-  
-  for (let i = 0 ;i < document.querySelectorAll("#content").length; i++) {
+  const content = document.createElementById("content");
+
+    const wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "wrapper");
+
+    const card = document.createElement("div");
+    wrapper.setAttribute("class", "card");
+
+    const image = document.createElement("img");
+
+     const cardBody = document.createElement("div");
+    cardBody.setAttribute("class", "card-body");
+
+    const cardTitle = document.createElement("h5");
+    cardTitle.setAttribute("class", "card-Title");
+
+    const cardText = document.createElement("p");
+    cardText.setAttribute("class", "card-Text");
+
+    const cardText = document.createElement("p");
+    cardText.setAttribute("class", "card-Text");
+
+    const btn = document.createElement("a");
+
+  for (let i = 0 ;i < data.hits.length; i++) {
 
   document.querySelector("#content").innerHTML = `
 <div id="wrapper">
@@ -221,6 +244,15 @@ function useApiData(data){
     <a href="${data.hits[i].recipe.url}" class="btn btn-primary">Full Recipe</a>
   </div>
 </div>
+
+content.appendChild(wrapper)
+content.appendChild(card)
+card.appendChild(image)
+card.appendChild(cardBody)
+carBody.appendChild(cardTitle)
+carBody.appendChild(cardText)
+carBody.appendChild(cardText)
+carBody.appendChild(btn)
 `
 }
 }
