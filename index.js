@@ -207,6 +207,7 @@ async function sendApiRequest(text) {
 // }
 
 function useApiData(data){
+
   const content = document.createElementById("content");
 
     const wrapper = document.createElement("div");
@@ -221,13 +222,13 @@ function useApiData(data){
     cardBody.setAttribute("class", "card-body");
 
     const cardTitle = document.createElement("h5");
-    cardTitle.setAttribute("class", "card-Title");
+    cardTitle.setAttribute("class", "card-title");
 
     const cardText = document.createElement("p");
-    cardText.setAttribute("class", "card-Text");
+    cardText.setAttribute("class", "card-text");
 
-    const cardText = document.createElement("p");
-    cardText.setAttribute("class", "card-Text");
+    const cardText1 = document.createElement("p");
+    cardText1.setAttribute("class", "card-text");
 
     const btn = document.createElement("a");
 
@@ -251,7 +252,7 @@ card.appendChild(image)
 card.appendChild(cardBody)
 carBody.appendChild(cardTitle)
 carBody.appendChild(cardText)
-carBody.appendChild(cardText)
+carBody.appendChild(cardText1)
 carBody.appendChild(btn)
 `
 }
