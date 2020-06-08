@@ -174,15 +174,19 @@ function initMap() {
 
 //add an event listener to the button that runs the function sendApiRequest when it is clicked.
 let searchInput = document.querySelector(".searchImput")
+  
 let searchButton = document.querySelector("#search")
+
 searchButton.addEventListener("click", () => {
   console.log("button pressed")
   sendApiRequest(searchInput.value)
+
 })
 
 //an asysncrhonous function to fetch data from the API.
 async function sendApiRequest(text) {
   let search = text;
+  
   let APP_ID = "8890b18e"
   let API_KEY = "83f29000c0d94a9e37e048533135f2c4"
   let response = await fetch(`https://api.edamam.com/search?app_id=${APP_ID}&app_key=${API_KEY}&q=${search}`);
@@ -207,8 +211,15 @@ async function sendApiRequest(text) {
 // }
 
 function useApiData(data){
+    
+//     let searchInput = document.querySelector(".searchImput")
+// if (!searchInput){
+//       searchInput.innerHTML("<h2> Please enter a name</h2>")
+//     //   $("#search").html(`<h2> Please enter a name</h2>`)
+//     return;
+//   }
 
-  const content = document.createElementById("content");
+  const content = document.createElement("content");
 
     const wrapper = document.createElement("div");
     wrapper.setAttribute("id", "wrapper");
